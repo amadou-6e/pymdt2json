@@ -3,5 +3,6 @@ from .src.cli import create_parser
 
 __all__ = ["MinfyMDT"]
 
-if __name__ == "__main__":
+
+def main():
     create_parser()

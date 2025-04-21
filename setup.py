@@ -7,10 +7,9 @@ setup(
     author="Amadou Wolfgang Cisse",
     author_email="amadou.6e@googlemail.com",
     url="https://github.com/amadou-6e/pymdt2json.git",  # change this
-    packages=find_packages(where="src"),
-    package_dir={"": "src"},
+    packages=find_packages(),  # looks in current dir
     entry_points={
-        "console_scripts": ["pymdt2json=pymdt2json.cli:main",],
+        "console_scripts": ["pymdt2json=pymdt2json:main",],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
