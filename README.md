@@ -2,7 +2,7 @@
 
 **pymdt2json** is the Python version of [`mdtable2json`](https://github.com/amadou-6e/mdtable2json), a TypeScript library and CLI tool that converts markdown tables into structured JSON. This Python version provides equivalent functionality, making it easy to use markdown data in data science workflows, backend services, or preprocessing pipelines for LLM applications.
 
-## ✨ Features
+## Features
 
 - Convert markdown tables to JSON
 - CLI tool for batch or single-file processing
@@ -13,7 +13,7 @@
 
 ---
 
-## 🔧 Installation (CLI)
+## Installation (CLI)
 
 ```bash
 pip install pymdt2json
@@ -21,7 +21,7 @@ pip install pymdt2json
 
 ---
 
-## 🖥️ CLI Usage
+## CLI Usage
 
 ```bash
 pymdt2json --help
@@ -40,7 +40,7 @@ pymdt2json --help
 
 ---
 
-## 🧪 Library Usage (Python)
+## Library Usage (Python)
 
 ### Installation
 
@@ -66,7 +66,7 @@ print(parser.transform())
 
 ---
 
-## 🧠 Use Cases
+## Use Cases
 
 - Converting markdown tables to structured JSON for web or API use
 - Preprocessing markdown data for **LLM pipelines** or **RAG systems**
@@ -74,19 +74,18 @@ print(parser.transform())
 
 ---
 
-## 🔍 Library Internals
+## Library Internals
 
 This library uses regular expressions to match and parse markdown tables, then transforms them into JSON strings using the selected layout and formatting options.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Pull requests are welcome! For major changes, please open an issue first to discuss your ideas.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
-```
