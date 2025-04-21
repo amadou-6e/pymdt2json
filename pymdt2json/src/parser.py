@@ -11,9 +11,17 @@ class MinifyMDT:
 
     def _table_to_json(self, header, rows):
         if self.layout == "AoS":
-            return [{header[i]: row[i] for i in range(len(header))} for row in rows]
+            return [{
+                header[i]: row[i] for i in range(min(len(header), len(row)))
+            } for row in rows if len(row) == len(header)]
         else:  # SoA
-            return {col: [row[i] for row in rows] for i, col in enumerate(header)}
+            # initialize all columns with empty lists
+            table = {col: [] for col in header}
+            for row in rows:
+                for i, col in enumerate(header):
+                    value = row[i] if i < len(row) else None
+                    table[col].append(value)
+            return table
 
     def transform(self):
         table_pattern = re.compile(
