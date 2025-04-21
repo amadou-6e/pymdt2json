@@ -42,6 +42,6 @@ if __name__ == "__main__":
     assert md_sample_path.exists()
     with md_sample_path.open("r") as file:
         md_text = file.read()
-    parser = MarkdownTable2Json(markdown_string=md_text, layout="AoS", minify=True)
+    parser = MinifyMDT(markdown_string=md_text, layout="AoS", minify=True)
     result = parser.transform()
     print(result)
