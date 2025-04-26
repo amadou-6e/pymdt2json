@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pymdt2json",
-    version="0.1.0",
+    version="0.2.0",
     description="Convert markdown tables into JSON code blocks",
     author="Amadou Wolfgang Cisse",
     author_email="amadou.6e@googlemail.com",

@@ -1,13 +1,39 @@
 import json
-import re
+import markdown
+import html2text
+from bs4 import BeautifulSoup
 
 
 class MinifyMDT:
 
-    def __init__(self, markdown_string, layout="SoA", minify=True):
-        self.markdown_string = markdown_string
+    def __init__(self, markdown_text, layout="SoA", minify=True):
+        self.markdown_text = markdown_text
         self.layout = layout
         self.minify = minify
+        self._json_kwargs = {
+            "separators": (",", ":"),
+            "indent": None
+        } if self.minify else {
+            "indent": 2
+        }
+
+    def _html_table_to_markdown(self, table_tag):
+        """
+        Converts a BeautifulSoup <table> tag to clean Markdown table text.
+        """
+        rows = []
+        for tr in table_tag.find_all("tr"):
+            cells = tr.find_all(["td", "th"])
+            row = "| " + " | ".join(cell.get_text(strip=True) for cell in cells) + " |"
+            rows.append(row)
+
+        if len(rows) >= 2:
+            # Insert a separator after header
+            num_cols = rows[0].count("|") - 1
+            separator = "| " + " | ".join(["---"] * num_cols) + " |"
+            rows.insert(1, separator)
+
+        return "\n".join(rows)
 
     def _table_to_json(self, header, rows):
         if self.layout == "AoS":
@@ -15,41 +41,54 @@ class MinifyMDT:
                 header[i]: row[i] for i in range(min(len(header), len(row)))
             } for row in rows if len(row) == len(header)]
         else:  # SoA
-            # initialize all columns with empty lists
             table = {col: [] for col in header}
             for row in rows:
                 for i, col in enumerate(header):
-                    value = row[i] if i < len(row) else None
-                    table[col].append(value)
+                    table[col].append(row[i] if i < len(row) else None)
             return table
 
     def transform(self):
-        table_pattern = re.compile(
-            r"((?:\|[^\n]*\|[^\n]*\n)+\|[ \t]*[-:]+[^\n]*\n((?:\|[^\n]*\|[^\n]*\n?)+))",
-            re.MULTILINE)
+        # 1) Markdown → HTML
+        html = markdown.markdown(self.markdown_text, extensions=["tables"])
 
-        def table_replacer(match):
-            table_text = match.group(0).strip()
-            lines = [line.strip() for line in table_text.splitlines()]
-            header = [cell.strip() for cell in lines[0].strip("|").split("|")]
-            rows = [
-                [cell.strip() for cell in line.strip("|").split("|")] for line in lines[2:] if line
-            ]
+        # 2) Parse HTML
+        soup = BeautifulSoup(html, "html.parser")
+
+        # 3) Find all tables
+        for table in soup.find_all("table"):
+            table_md = self._html_table_to_markdown(table)
+
+            lines = [line.strip() for line in table_md.splitlines()]
+            if len(lines) < 2:
+                continue  # skip malformed tables
+
+            header = lines[0].strip("|").split("|")
+            rows = [line.strip("|").split("|") for line in lines[2:] if line.strip()]
             json_obj = self._table_to_json(header, rows)
-            json_str = json.dumps(json_obj,
-                                  separators=(",", ":") if self.minify else None,
-                                  indent=None if self.minify else 2)
-            return f"```json\n{json_str}\n```"
+            json_str = json.dumps(json_obj, **self._json_kwargs)
 
-        return table_pattern.sub(table_replacer, self.markdown_string)
+            # Create a <pre> tag with the JSON code block
+            pre_tag = soup.new_tag("pre")
+            pre_tag.string = f"```json\n{json_str}\n```"
+            table.replace_with(pre_tag)
+
+        # 4) HTML → Markdown
+        clean_html = str(soup)
+        final_markdown = html2text.HTML2Text().handle(clean_html)
+
+        return final_markdown
 
 
 if __name__ == "__main__":
     from pathlib import Path
-    md_sample_path = Path("pymdt2json", "tests", "assets", "small_sample.md")
+
+    md_sample_path = Path("usage",
+                          "markdown")  # Path("pymdt2json", "tests", "assets", "small_sample.md")
     assert md_sample_path.exists()
-    with md_sample_path.open("r") as file:
+
+    with md_sample_path.open("r", encoding="utf-8") as file:
         md_text = file.read()
-    parser = MinifyMDT(markdown_string=md_text, layout="AoS", minify=True)
+
+    parser = MinifyMDT(markdown_text=md_text, layout="AoS", minify=True)
     result = parser.transform()
     print(result)
