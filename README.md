@@ -11,7 +11,6 @@
   - **AoS** (Array of Structures): `[ {col1: ..., col2: ...}, ... ]`
 - Optionally minify output JSON
 
----
 
 ## Installation (CLI)
 
@@ -19,7 +18,6 @@
 pip install pymdt2json
 ```
 
----
 
 ## CLI Usage
 
@@ -38,7 +36,6 @@ pymdt2json --help
 | `-l, --layout <layout>`   | Layout of JSON output (`SoA` or `AoS`)        |
 | `-m, --minify`            | Minify JSON output                            |
 
----
 
 ## Library Usage (Python)
 
@@ -64,7 +61,6 @@ parser = MinifyMDT(markdown_string, layout="AoS", minify=True)
 print(parser.transform())
 ```
 
----
 
 ## Use Cases
 
@@ -72,19 +68,16 @@ print(parser.transform())
 - Preprocessing markdown data for **LLM pipelines** or **RAG systems**
 - Data cleaning, transformation, or downstream analytics workflows
 
----
 
 ## Library Internals
 
 This library uses regular expressions to match and parse markdown tables, then transforms them into JSON strings using the selected layout and formatting options.
 
----
 
 ## Contributing
 
 Pull requests are welcome! For major changes, please open an issue first to discuss your ideas.
 
----
 
 ## License
 
