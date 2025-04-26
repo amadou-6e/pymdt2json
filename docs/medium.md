@@ -1,8 +1,3 @@
-Awesome work — your article is already quite clear and technical!  
-Now, based on your request and my guidelines, I'll **break this down for you as an analysis in a Medium-style article** post with enhanced flow: **using headers, sub-headers, bullet points**, and a bit more polish for maximum engagement while preserving all your original meaning.
-
----
-
 # Minifying Tables with `pymtd2json`: Boosting Efficiency in RAG Systems
 
 In retrieval-augmented generation (RAG) pipelines, input efficiency is paramount — not just in terms of tokens, but also **character limits**.  
@@ -13,7 +8,6 @@ the Cohere multilingual model imposes a **maximum of 2048 characters**, not a to
 This article walks you through a clever solution:  
 **preprocessing Markdown tables into dense JSON blocks** using `pymtd2json`, to ensure smooth, efficient embeddings without errors.
 
----
 
 ## The Challenge: Character Limits vs Token Limits
 
@@ -30,7 +24,6 @@ you set a maximum number of tokens per chunk — but **not characters**.
 Markdown tables are up to **3x less token-efficient** than other formats, further compounding the problem.  
 👉 [Read more on token inefficiency of Markdown tables here.](https://medium.com/singapore-gds/cutting-cost-and-enhancing-performance-minifying-markdown-tables-to-improve-token-efficiency-in-af488a784fd5)
 
----
 
 ## A Real-World Example: Measuring the Problem
 
@@ -59,7 +52,6 @@ print(table_text)
 
 This generates a verbose table with **30 rows** and a **very long header**.
 
----
 
 ### Step 2: Analyze Token and Character Counts
 
@@ -90,7 +82,6 @@ While token count is fine, character count **exceeds 2048**, causing API errors 
 cohere.error.CohereAPIError: input text exceeds maximum allowed size of 2048 characters
 ```
 
----
 
 ## The Solution: Minifying Tables into JSON
 
@@ -115,7 +106,6 @@ Example of the compact JSON:
 
 ✅ Now **well within** Cohere’s input limit!
 
----
 
 ## Applying Minification in Practice
 
@@ -138,7 +128,6 @@ for idx, doc in enumerate(documents):
 
 👉 And voilà: **Your data is compact, clean, and embedding-ready!**
 
----
 
 # Final Thoughts
 
