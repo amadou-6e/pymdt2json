@@ -1,8 +1,15 @@
+from pathlib import Path
 from setuptools import setup, find_packages
+
+
+def parse_requirements(filename):
+    print(filename)
+    return [line for line in Path(filename).read_text().splitlines() if line]
+
 
 setup(
     name="pymdt2json",
-    version="0.3.0",
+    version="0.4.0",
     description="Convert markdown tables into JSON code blocks",
     author="Amadou Wolfgang Cisse",
     author_email="amadou.6e@googlemail.com",
@@ -13,9 +20,9 @@ setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    install_requires=parse_requirements("requirements.txt"),
     python_requires=">=3.7",
     include_package_data=True,
 )
